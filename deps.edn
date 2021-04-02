@@ -1,0 +1,10 @@
+{:deps    {}
+ :paths   ["src"]
+ :aliases {:test {:extra-deps  {com.google.cloud/google-cloud-storage      {:mvn/version "1.113.12"}
+                                ring/ring-json                             {:mvn/version "0.5.0"}
+                                liberator/liberator                        {:mvn/version "0.15.3"}
+                                nl.epij/google-cloud-function-ring-adapter {:mvn/version "0.1.0-SNAPSHOT"}
+                                ring/ring-core                             {:mvn/version "1.8.2"}
+                                ring/ring-mock                             {:mvn/version "0.4.0"}
+                                nubank/matcher-combinators                 {:mvn/version "3.1.4"}}
+                  :extra-paths ["test"]}}}

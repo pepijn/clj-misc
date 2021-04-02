@@ -37,6 +37,4 @@
                  ::wf/domain-object {::name "Hank"}
                  ::wf/effects       [{:say-hello-world "Hello Hank"}]}
                 (handler {:request-method :patch
-                          :body           {"person-name" "Hank"}})))
-    (handler {:request-method :patch
-              :body           {"person-name" "Hank"}})))
+                          :body           {"person-name" "Hank"}})))))

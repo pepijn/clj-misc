@@ -1,5 +1,5 @@
 (ns nl.epij.workflow-test
-  (:require [clojure.test :refer :all])
+  (:require [clojure.test :refer [deftest is]])
   (:require [nl.epij.workflow :as wf]
             [clojure.spec.alpha :as s]
             [matcher-combinators.test]

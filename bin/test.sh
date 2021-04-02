@@ -6,7 +6,7 @@ set -euxo pipefail
 shellcheck "$0"
 
 function main() {
-  clj-kondo --lint src
+  clj-kondo --lint src test
   clojure -M:test
 }
 

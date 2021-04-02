@@ -23,15 +23,3 @@
         task         (.createTask client queue-path (.build task-builder))]
     (log/info (str "Google Cloud Task created: " task-name) command)
     task))
-
-(comment
-
- (effects/execute! {}
-                   {:nl.epij.command/action   "https://example.com"
-                    :nl.epij.command/contents {"description"       "ABB HAF  INBOUWDOOS UNV 40-50MM HAFOPLAST INBOUWDOZEN (MD4050)"
-                                               "price"             3.52M
-                                               "ledger-account-id" "-1"
-                                               "tax-rate-id"       "-1"}
-                    :nl.epij.command/name     "projects/project-id/locations/europe-west2/queues/development-product-push/tasks/import-task-thing"})
-
- )

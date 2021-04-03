@@ -16,9 +16,10 @@
                             (when-not (map? m) (throw (ex-info "Not a map" {})))
                             {::name person-name}))
    ::wf/domain-spec     ::test-domain-model
-   ::wf/enacted?        false
+   ::wf/side-effects    #{{:nl.epij.effect/name :nl.epij.effect/noop}}
    ::wf/data->effects   (fn [{::keys [name]}]
-                          [{:say-hello-world (format "Hello %s" name)}])})
+                          [{:nl.epij.effect/name :nl.epij.effect/noop
+                            :say-hello-world (format "Hello %s" name)}])})
 
 (deftest workflows
   (let [resource (wf/workflow-resource workflow)
@@ -33,7 +34,7 @@
                  ::wf/domain-object (m/pred #(instance? Exception %))}
                 (handler {:request-method :patch
                           :body           "olar"})))
-    (is (match? {:status            202
+    (is (match? {:status            204
                  ::wf/domain-object {::name "Hank"}
                  ::wf/effects       [{:say-hello-world "Hello Hank"}]}
                 (handler {:request-method :patch

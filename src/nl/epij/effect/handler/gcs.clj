@@ -97,7 +97,7 @@
 (defmethod effects/get-handler :nl.epij.effect.storage.file/write
   [command]
   {::effects/enact?   true
-   ::effects/execute! #(write! command)})
+   ::effects/execute! (fn [_components] (write! command))})
 
 (comment
 

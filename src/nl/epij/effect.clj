@@ -11,3 +11,8 @@
               (-> (get-handler side-effect)
                   ::enact?)))
        (every? true?)))
+
+(defmethod get-handler :nl.epij.effect/noop
+  [_]
+  {::enact? true
+   ::execute! (constantly nil)})

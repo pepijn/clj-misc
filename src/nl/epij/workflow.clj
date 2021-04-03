@@ -13,7 +13,7 @@
 
 (defn workflow-resource
   ([config] (workflow-resource config vector))
-  ([{::keys [request->domain domain-spec data->effects side-effects]} process-effect!]
+  ([{::keys [request->domain domain-spec data->effects side-effects]} components]
    {:pre [(set? side-effects)]}
    {:allowed-methods             #{:patch}
     :initialize-context          (fn [{:keys [request]}]
@@ -36,7 +36,8 @@
     :patch!                      (fn [{::keys [effects]}]
                                    (doseq [{::effects/keys [name] :as effect} effects]
                                      (assert (contains? (into #{} (map ::effects/name side-effects)) name))
-                                     (process-effect! {} effect)))
+                                     (let [{::effects/keys [execute!]} (effects/get-handler effect)]
+                                       (execute! components))))
     :handle-accepted             handle-patch-final
     :handle-no-content           handle-patch-final
     :handle-exception            (fn [{:keys [status] :as ctx}] ;; TODO: test this! And make sure to warn when against using in production

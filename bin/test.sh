@@ -5,6 +5,8 @@ set -euxo pipefail
 # Shellcheck itself
 shellcheck "$0"
 
+cd "$(dirname "$(realpath "$0")")/.."
+
 function main() {
   clj-kondo --lint src test
   clojure -M:test

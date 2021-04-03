@@ -3,13 +3,21 @@
             [liberator.representation :as lib.rep]
             [nl.epij.gcp.gcf.log :as log]
             [clojure.pprint :as pprint]
-            [nl.epij.effect :as effects]))
+            [nl.epij.effect :as effects]
+            [clojure.set :as set]))
 
 (defn handle-patch-final
   [ring-map]
   (-> ring-map
       (select-keys [:status :headers :message :body ::domain-object ::effects])
       (lib.rep/ring-response)))
+
+(defn validate-side-effects!
+  [expected actual]
+  (let [expected' (into #{} (map ::effects/name expected))
+        actual'   (into #{} (map ::effects/name actual))]
+    (assert (empty? (set/difference expected' actual')))
+    (assert (empty? (set/difference actual' expected')))))
 
 (defn workflow-resource
   ([config] (workflow-resource config vector))
@@ -34,8 +42,8 @@
                                          (lib.rep/ring-response))))
     :patch-enacted?              (effects/enact? side-effects)
     :patch!                      (fn [{::keys [effects]}]
-                                   (doseq [{::effects/keys [name] :as effect} effects]
-                                     (assert (contains? (into #{} (map ::effects/name side-effects)) name))
+                                   (validate-side-effects! side-effects effects)
+                                   (doseq [effect effects]
                                      (let [{::effects/keys [execute!]} (effects/get-handler effect)]
                                        (execute! components))))
     :handle-accepted             handle-patch-final

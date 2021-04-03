@@ -56,8 +56,8 @@
                       (blob->stream)
                       (stream->obj json?))]
     (conj {:nl.epij.storage.file/location   location
-           :nl.epij.storage.file/exists?    (some? blob)
-           :nl.epij.storage.file/generation (.getGeneration blob)}
+           :nl.epij.storage.file/exists?    (some? blob)}
+          (when blob {:nl.epij.storage.file/generation (.getGeneration blob)})
           (when data {:nl.epij.storage.file/contents data}))))
 
 (defmethod effects/execute! :nl.epij.effect.storage.file/read

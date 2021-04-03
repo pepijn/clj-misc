@@ -74,9 +74,9 @@
                 contents)]
     (if generation
       (create-object nil (.getBytes data)
-                             bucket
-                             key
-                             [(Bucket$BlobTargetOption/generationMatch generation)])
+                     bucket
+                     key
+                     [(Bucket$BlobTargetOption/generationMatch generation)])
       (create-object nil (.getBytes data) bucket key))
     ;; TODO: it should probably return its location, as long as it respects CQRS
     nil))
@@ -93,6 +93,11 @@
         result (write! (assoc file :nl.epij.storage.file/contents data
                                    :nl.epij.storage.file/generation generation))]
     result))
+
+(defmethod effects/get-handler :nl.epij.effect.storage.file/write
+  [command]
+  {::effects/enact?   true
+   ::effects/execute! #(write! command)})
 
 (comment
 

@@ -6,10 +6,9 @@
   (:import [com.google.cloud.tasks.v2 CloudTasksClient QueueName Task HttpRequest HttpMethod Task$Builder]
            [com.google.protobuf ByteString]))
 
-(defmethod effects/execute! :nl.epij.effect.task/create
-  [_ {:nl.epij.command/keys [name action contents] :as command}]
+(defn create-task!
+  [{:nl.epij.command/keys [name action contents] :as command} ^CloudTasksClient client]
   (let [[_ project-id _ location-id _ queue-id _ task-name] (str/split name #"/")
-        client       ^CloudTasksClient (CloudTasksClient/create)
         queue-path   ^String (.toString (QueueName/of project-id location-id queue-id))
         message      (json/generate-string contents {:pretty true})
         http-request (.build (doto (HttpRequest/newBuilder)
@@ -23,3 +22,16 @@
         task         (.createTask client queue-path (.build task-builder))]
     (log/info (str "Google Cloud Task created: " task-name) command)
     task))
+
+(defmethod effects/execute! :nl.epij.effect.task/create
+[_ command]
+  (create-task! command (CloudTasksClient/create)))
+
+(defmethod effects/get-handler :nl.epij.effect.task/create
+  [command]
+  {::effects/enact?   false
+   ::effects/execute! (partial create-task! command)})
+
+(comment
+
+ )

@@ -2,7 +2,8 @@
   (:require [clojure.spec.alpha :as s]
             [liberator.representation :as lib.rep]
             [nl.epij.gcp.gcf.log :as log]
-            [clojure.pprint :as pprint]))
+            [clojure.pprint :as pprint]
+            [nl.epij.effect :as effects]))
 
 (defn handle-patch-final
   [ring-map]
@@ -12,8 +13,8 @@
 
 (defn workflow-resource
   ([config] (workflow-resource config vector))
-  ([{::keys [request->domain domain-spec data->effects enacted?]} process-effect!]
-   {:pre [(some? enacted?)]}
+  ([{::keys [request->domain domain-spec data->effects side-effects]} process-effect!]
+   {:pre [(set? side-effects)]}
    {:allowed-methods             #{:patch}
     :initialize-context          (fn [{:keys [request]}]
                                    {::domain-object (try (request->domain request)
@@ -31,9 +32,10 @@
                                          (select-keys [:status :headers :message ::domain-object])
                                          (assoc :body explanation)
                                          (lib.rep/ring-response))))
-    :patch-enacted?              enacted?
+    :patch-enacted?              (effects/enact? side-effects)
     :patch!                      (fn [{::keys [effects]}]
-                                   (doseq [effect effects]
+                                   (doseq [{::effects/keys [name] :as effect} effects]
+                                     (assert (contains? (into #{} (map ::effects/name side-effects)) name))
                                      (process-effect! {} effect)))
     :handle-accepted             handle-patch-final
     :handle-no-content           handle-patch-final

@@ -24,16 +24,16 @@
   [{::keys [moneybird-request!]} product]
   (log/info "Creating product on Moneybird" product)
   (let [result ((force moneybird-request!) "/products.json"
-                                   {:method      :post
-                                    :form-params (form-params product)})]
+                {:method      :post
+                 :form-params (form-params product)})]
     {:nl.epij.moneybird.product/id (get-in result [:body :id])}))
 
 (defmethod effects/execute! :nl.epij.effect.moneybird.product/update
   [{::keys [moneybird-request!]} {:nl.epij.moneybird.product/keys [id] :as product}]
   (log/info (format "Updating product ID %s on Moneybird" id) product)
   ((force moneybird-request!) (format "/products/%s.json" id)
-                      {:method      :patch
-                       :form-params (form-params product)})
+   {:method      :patch
+    :form-params (form-params product)})
   nil)
 
 (comment

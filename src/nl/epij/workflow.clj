@@ -43,7 +43,8 @@
     :patch-enacted?              (effects/enact? side-effects)
     :patch!                      (fn [{::keys [effects]}]
                                    (validate-side-effects! side-effects effects)
-                                   (doseq [effect effects]
+                                   (doseq [{::effects/keys [name] :as effect} effects]
+                                     (log/debug (str "Running side effect: " name) effect)
                                      (let [{::effects/keys [execute!]} (effects/get-handler effect)]
                                        (execute! components))))
     :handle-accepted             handle-patch-final

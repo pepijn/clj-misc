@@ -1,7 +1,7 @@
 (ns nl.epij.effect.handler.moneybird
   (:require [nl.epij.effect :as effects]
             [hato.client :as hc]
-            [nl.epij.gcp.gcf.log :as log]
+            [nl.epij.gcf.log :as log]
             [clojure.string :as str]))
 
 (defn moneybird-client

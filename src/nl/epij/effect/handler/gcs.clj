@@ -3,7 +3,7 @@
             [clojure.string :as str]
             [cheshire.core :as json]
             [clojure.java.io :as io]
-            [nl.epij.gcp.gcf.log :as log])
+            [nl.epij.gcf.log :as log])
   (:import [java.io ByteArrayInputStream]
            [com.google.cloud.storage Blob$BlobSourceOption Bucket$BlobTargetOption Blob BlobId StorageOptions Storage Storage$BucketGetOption]))
 

@@ -1,7 +1,7 @@
 (ns nl.epij.workflow
   (:require [clojure.spec.alpha :as s]
             [liberator.representation :as lib.rep]
-            [nl.epij.gcp.gcf.log :as log]
+            [nl.epij.gcf.log :as log]
             [clojure.pprint :as pprint]
             [nl.epij.effect :as effects]
             [clojure.set :as set]))

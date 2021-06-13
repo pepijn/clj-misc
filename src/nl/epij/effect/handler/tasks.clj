@@ -2,7 +2,7 @@
   (:require [nl.epij.effect :as effects]
             [clojure.string :as str]
             [cheshire.core :as json]
-            [nl.epij.gcp.gcf.log :as log])
+            [nl.epij.gcf.log :as log])
   (:import [com.google.cloud.tasks.v2 CloudTasksClient QueueName Task HttpRequest HttpMethod Task$Builder]
            [com.google.protobuf ByteString]))
 
